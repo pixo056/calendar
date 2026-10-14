@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#365c48">
+  <title>Студенческий календарь · ТОП-105Б</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23365c48'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='sans-serif' font-size='38' fill='white'%3EК%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="responsive.css?v=3">
+  <script src="app.js?v=3" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Студенческий календарь"><span class="brand-icon">К</span><span>Календарь<small>учимся по плану</small></span></a>
+    <div class="group"><span class="eyebrow">ВАША ГРУППА</span><button id="choose-group" type="button" aria-haspopup="dialog" disabled><strong id="selected-group">ТОП-105Б</strong><span aria-hidden="true">⌄</span></button><span>Нажмите, чтобы сменить группу</span></div>
+    <nav aria-label="Разделы"><button id="calendar-view" class="nav-button active" aria-label="Календарь">▦ <span>Календарь</span></button><button id="list-view" class="nav-button" aria-label="Список событий">☷ <span>Список событий</span></button></nav>
+    <div class="categories"><div class="eyebrow">ТИПЫ СОБЫТИЙ</div><div><i class="dot TEST"></i>Контрольные</div><div><i class="dot CREDIT"></i>Зачёты</div><div><i class="dot EXAM"></i>Экзамены</div><div><i class="dot ACTIVITY"></i>Мероприятия</div><div><i class="dot DEADLINE"></i>Дедлайны</div></div>
+    <div class="sidebar-note"><span>Всё под контролем</span><p>Планируйте заранее — оставляйте время на главное.</p></div>
+  </aside>
+  <main>
+    <header><div class="breadcrumb"><span id="breadcrumb-group">Группа ТОП-105Б</span> <span>/</span> Учебный план</div><span id="current-date"></span></header>
+    <section class="heading"><div><div class="eyebrow">ВАШ УЧЕБНЫЙ РИТМ</div><h1>Студенческий календарь</h1><p>Контрольные, встречи и дедлайны. Ничего не упустите.</p></div><button class="primary" id="add-event">+ Добавить событие</button></section>
+    <section class="stats" aria-label="Статистика"><article><span>В этом месяце</span><strong id="month-count">0</strong><small>учебных событий</small></article><article><span>Ближайшие 7 дней</span><strong id="week-count">0</strong><small>запланировано</small></article><article class="accent-stat"><span>Ближайший дедлайн</span><strong id="deadline-title">Пока нет</strong><small id="deadline-date">Можно спокойно выдохнуть</small></article></section>
+    <div class="workspace"><section class="calendar-panel"><div class="calendar-toolbar"><div class="month-navigation"><h2 id="month-title"></h2><button id="previous-month" aria-label="Предыдущий месяц">‹</button><button id="next-month" aria-label="Следующий месяц">›</button><button id="today">Сегодня</button></div><div class="filters"><label class="sr-only" for="search">Поиск по событиям</label><input id="search" type="search" placeholder="Найти событие…"><label class="sr-only" for="type-filter">Тип события</label><select id="type-filter"><option value="">Все типы</option><option value="TEST">Контрольные</option><option value="CREDIT">Зачёты</option><option value="EXAM">Экзамены</option><option value="ACTIVITY">Мероприятия</option><option value="DEADLINE">Дедлайны</option></select></div></div><div id="calendar-content"></div><div class="calendar-footer"><span><i class="today-mark"></i> Сегодня</span><span>Нажмите на дату, чтобы добавить событие</span></div></section>
+    <aside class="upcoming"><div class="upcoming-heading"><h2>На подходе</h2><span>7 дней</span></div><div id="upcoming-content"></div><div class="tip"><span>Небольшой совет</span><p>Добавляйте аудиторию и тему — так подготовиться будет проще.</p></div></aside></div>
+    <p class="storage-note">У каждой группы — свой календарь. Выберите группу, чтобы увидеть её события.</p>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <dialog id="event-dialog" aria-labelledby="dialog-title"><form id="event-form"><div class="dialog-heading"><div><span class="eyebrow">ПЛАНЫ ГРУППЫ</span><h2 id="dialog-title">Новое событие</h2></div><button type="button" id="close-dialog" class="icon-button" aria-label="Закрыть">×</button></div><input id="event-id" type="hidden"><label>Название *<input name="title" required maxlength="120" placeholder="Например, контрольная по массивам"></label><div class="form-row"><label>Предмет *<input name="subject" required maxlength="100" placeholder="Программирование"></label><label>Тип *<select name="type" required><option value="TEST">Контрольная</option><option value="CREDIT">Зачёт</option><option value="EXAM">Экзамен</option><option value="ACTIVITY">Мероприятие</option><option value="DEADLINE">Дедлайн</option></select></label></div><div class="form-row"><label>Дата *<input type="date" name="date" required min="1900-01-01" max="9999-12-31"></label><label>Время<input type="time" name="time"></label></div><label>Место<input name="location" maxlength="120" placeholder="Аудитория или ссылка"></label><label>Описание<textarea name="description" maxlength="2000" rows="3" placeholder="Что подготовить и взять с собой"></textarea></label><p id="form-error" role="alert"></p><div class="form-actions"><button id="delete-event" type="button" class="danger" hidden>Удалить</button><div><button type="button" id="cancel-dialog">Отмена</button><button type="submit" class="primary" id="save-event">Сохранить</button></div></div></form></dialog>
+  <dialog id="delete-dialog" aria-labelledby="delete-title"><h2 id="delete-title">Удалить событие?</h2><p id="delete-description"></p><p>Это действие нельзя отменить.</p><div class="confirm-actions"><button id="cancel-delete">Отмена</button><button class="danger" id="confirm-delete">Удалить событие</button></div></dialog>
+  <dialog id="group-dialog" aria-labelledby="group-title">
+    <div class="dialog-heading"><div><span class="eyebrow">УУНиТ</span><h2 id="group-title">Выберите группу</h2></div><button type="button" id="close-groups" class="icon-button" aria-label="Закрыть выбор группы">×</button></div>
+    <label for="group-search">Название группы<input id="group-search" type="search" autocomplete="off" placeholder="Например, ТОП-105Б"></label>
+    <p id="group-results-count" class="storage-note" aria-live="polite"></p>
+    <div id="group-results" role="group" aria-label="Группы"></div>
+    <p class="storage-note">Справочник: <a href="https://isu.uust.ru/class_schedule/" target="_blank" rel="noopener noreferrer">расписание УУНиТ</a> · 14.10.2026. Здесь выбирается группа; занятия из расписания автоматически не загружаются.</p>
+  </dialog>
+</body>
+</html>
