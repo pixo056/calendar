@@ -1,13 +1,14 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-if not defined JAVA_HOME if exist "%USERPROFILE%\.jdks\ms-25.0.4.1\bin\java.exe" set "JAVA_HOME=%USERPROFILE%\.jdks\ms-25.0.4.1"
-if not defined JAVA_HOME (
-  echo Set JAVA_HOME to a JDK 25 installation and try again.
+call scripts\java-env.cmd
+if errorlevel 1 (
   pause
   exit /b 1
 )
 set "MAVEN_USER_HOME=%~dp0.mvn\user-home"
 echo Calendar will be available at http://localhost:8080
 call mvnw.cmd spring-boot:run
-if errorlevel 1 pause
+set "CALENDAR_EXIT=%ERRORLEVEL%"
+if not "%CALENDAR_EXIT%"=="0" pause
+exit /b %CALENDAR_EXIT%

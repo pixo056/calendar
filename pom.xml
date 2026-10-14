@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>ru.top105</groupId>
 	<artifactId>calendar</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>calendar</name>
-	<description>Student event calendar for TOP-105</description>
+	<description>Student event calendar for UUST study groups</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -66,6 +66,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>calendar</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
